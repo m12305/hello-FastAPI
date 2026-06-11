@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/admin.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="/">📚 首页</a>
+        <a href="/admin">📋 管理后台</a>
+        <a href="/admin/books/new">➕ 添加图书</a>
+    </nav>
+
+    <div class="container">
+        <h1>
+            {% if book %}
+                ✏️ {{ title }}
+            {% else %}
+                ➕ {{ title }}
+            {% endif %}
+        </h1>
+
+        <!--
+            表单的 action 根据是否为编辑模式动态切换：
+            - 新建: POST /admin/books
+            - 编辑: POST /admin/books/{id}/update
+        -->
+        <form method="post"
+              action="{% if book %}/admin/books/{{ book.id }}/update{% else %}/admin/books{% endif %}">
+
+            <!-- 书名 -->
+            <div class="form-group">
+                <label for="title">📖 书名 *</label>
+                <input type="text" id="title" name="title"
+                       value="{{ book.title if book else '' }}"
+                       placeholder="请输入书名"
+                       required minlength="1" maxlength="200">
+                <small>必填，1-200 个字符</small>
+            </div>
+
+            <!-- 作者 -->
+            <div class="form-group">
+                <label for="author">✍️ 作者 *</label>
+                <input type="text" id="author" name="author"
+                       value="{{ book.author if book else '' }}"
+                       placeholder="请输入作者"
+                       required minlength="1" maxlength="100">
+                <small>必填，1-100 个字符</small>
+            </div>
+
+            <!-- 价格 -->
+            <div class="form-group">
+                <label for="price">💰 价格（元）*</label>
+                <input type="number" id="price" name="price"
+                       value="{{ "%.2f" | format(book.price) if book else '' }}"
+                       placeholder="请输入价格"
+                       required step="0.01" min="0.01" max="99999.99">
+                <small>必填，0.01 ~ 99,999.99 元</small>
+            </div>
+
+            <!-- 分类 -->
+            <div class="form-group">
+                <label for="category">📂 分类 *</label>
+                <select id="category" name="category" required>
+                    <option value="">-- 请选择分类 --</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat }}"
+                            {% if book and book.category == cat %}selected{% endif %}>
+                        {{ cat }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <small>必选</small>
+            </div>
+
+            <!-- 按钮 -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    {% if book %}💾 保存修改{% else %}✅ 创建图书{% endif %}
+                </button>
+                <a href="/admin" class="btn">❌ 取消</a>
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p>FastAPI 学习阶段 2.5 — 静态文件与模板 · 图书管理 Demo</p>
+    </footer>
+</body>
+</html>

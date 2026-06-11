@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/admin.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="/">📚 首页</a>
+        <a href="/admin">📋 管理后台</a>
+        <a href="/admin/books/new">➕ 添加图书</a>
+        <a href="/docs" target="_blank">📖 API 文档</a>
+    </nav>
+
+    <div class="container">
+        <h1>📋 {{ title }}</h1>
+
+        <!-- 统计 -->
+        <div class="stats">
+            <div class="stat-card">
+                <h3>📖 总藏书</h3>
+                <p class="big">{{ stats.total_books }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>💰 总价值</h3>
+                <p class="big">¥{{ "%.2f" | format(stats.total_value) }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>📂 分类</h3>
+                <p class="big">{{ stats.by_category | length }}</p>
+            </div>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="toolbar">
+            <h2>图书列表</h2>
+            <a href="/admin/books/new" class="btn">➕ 新建图书</a>
+        </div>
+
+        <!-- 图书表格 -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>书名</th>
+                    <th>作者</th>
+                    <th>价格</th>
+                    <th>分类</th>
+                    <th>添加日期</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if books %}
+                    {% for book in books %}
+                    <tr>
+                        <td>{{ book.id }}</td>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>¥{{ "%.2f" | format(book.price) }}</td>
+                        <td>{{ book.category }}</td>
+                        <td>{{ book.created_at }}</td>
+                        <td>
+                            <a href="/admin/books/{{ book.id }}/edit" class="btn-edit">编辑</a>
+                            <a href="/admin/books/{{ book.id }}/delete"
+                               class="btn-danger"
+                               onclick="return confirm('确定要删除《{{ book.title }}》吗？此操作不可恢复。')">
+                                删除
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: #aaa; padding: 40px;">
+                            📭 暂无图书数据，<a href="/admin/books/new">点击这里</a>添加第一本书
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <!-- 分类分布 -->
+        <h2>📊 分类分布</h2>
+        <div class="stats">
+            {% for cat, count in stats.by_category.items() %}
+            <div class="stat-card">
+                <h3>{{ cat }}</h3>
+                <p class="big">{{ count }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <footer>
+        <p>FastAPI 学习阶段 2.5 — 静态文件与模板 · 图书管理 Demo</p>
+    </footer>
+</body>
+</html>

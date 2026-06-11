@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/admin.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="/">📚 首页</a>
+        <a href="/admin">📋 管理后台</a>
+        <a href="/admin/books/new">➕ 添加图书</a>
+        <a href="/docs" target="_blank">📖 API 文档</a>
+    </nav>
+
+    <div class="container">
+        <!-- 首页 Hero -->
+        <div class="home-hero">
+            <h1>📚 图书管理系统</h1>
+            <p>基于 FastAPI + Jinja2 的简易管理后台 —— 2.5 章节学习 Demo</p>
+        </div>
+
+        <!-- 统计卡片 -->
+        <div class="stats">
+            <div class="stat-card">
+                <h3>📖 总藏书</h3>
+                <p class="big">{{ stats.total_books }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>💰 总价值</h3>
+                <p class="big">¥{{ "%.2f" | format(stats.total_value) }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>📂 分类数</h3>
+                <p class="big">{{ stats.by_category | length }}</p>
+            </div>
+        </div>
+
+        <!-- 分类分布 -->
+        <h2>📊 分类分布</h2>
+        <div class="stats">
+            {% for cat, count in stats.by_category.items() %}
+            <div class="stat-card">
+                <h3>{{ cat }}</h3>
+                <p class="big">{{ count }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- 最近添加 -->
+        <h2>🆕 最近添加</h2>
+        <div class="recent-books">
+            {% for book in recent_books %}
+            <div class="book-card">
+                <h3>{{ book.title }}</h3>
+                <p class="meta">{{ book.author }} · {{ book.category }}</p>
+                <p class="meta">¥{{ "%.2f" | format(book.price) }} · {{ book.created_at }}</p>
+            </div>
+            {% else %}
+            <p>暂未添加任何图书</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <footer>
+        <p>FastAPI 学习阶段 2.5 — 静态文件与模板 · 图书管理 Demo</p>
+    </footer>
+</body>
+</html>
