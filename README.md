@@ -74,7 +74,7 @@
 | **0** | 前置基础 | Python 类型标注 · 异步编程 · HTTP 协议 · Pydantic | ✅ 已完成 |
 | **1** | FastAPI 核心 | Hello World · 路径操作 · 查询参数 · 响应模型 · 错误处理 | ✅ 已完成 |
 | **2** | 请求与响应 | 高级验证 · Header/Cookie/表单/文件上传 · 依赖注入 · 中间件与 CORS · 静态文件与模板 | ✅ 已完成 |
-| **3** | 数据库与 ORM | SQLAlchemy 基础 · 集成 FastAPI · Alembic 迁移 · 异步数据库 · 高级话题 | 🚧 规划中 |
+| **3** | 数据库与 ORM | SQLAlchemy 基础 · 集成 FastAPI · Alembic 迁移 · 异步数据库 · 高级话题 | ✅ 已完成 |
 | **4** | 认证与授权 | 认证基础 · JWT · 权限控制 · 安全最佳实践 | 🚧 规划中 |
 | **5** | 测试 | TestClient · Mock 与依赖覆盖 · CI 集成 | 🚧 规划中 |
 | **6** | 高级特性 | 后台任务 · WebSocket · 生命周期 · API 版本化 · 性能优化 | 🚧 规划中 |
