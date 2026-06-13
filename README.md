@@ -46,6 +46,7 @@
 | **数据校验** | Pydantic v2 | 类型安全的数据验证，FastAPI 的基石 |
 | **数据库** | SQLAlchemy 2.0 + Alembic | ORM + 数据库迁移（阶段 3） |
 | **认证** | JWT + OAuth2 | Token 认证与权限控制（阶段 4） |
+| **测试** | pytest + httpx | 单元测试、集成测试、CI 自动化（阶段 5） |
 | **模板引擎** | Jinja2 | 服务端页面渲染 |
 | **缓存** | Redis | 缓存策略与分布式锁（阶段 7） |
 | **任务队列** | Celery | 异步任务处理（阶段 9） |
@@ -61,6 +62,7 @@
 - **掌握依赖注入**：FastAPI 最核心的概念——能用依赖注入管理认证、数据库、权限等横切关注点
 - **数据库工程化**：能用 SQLAlchemy + Alembic 做数据持久化和版本迁移
 - **安全最佳实践**：JWT 认证、RBAC 权限控制、CORS 配置、速率限制
+- **自动化测试**：用 TestClient + pytest 编写单元测试和集成测试，Mock 外部依赖，配置 CI 流水线
 - **生产部署能力**：Docker 容器化、Nginx 反向代理、CI/CD 流水线
 
 ---
@@ -75,8 +77,8 @@
 | **1** | FastAPI 核心 | Hello World · 路径操作 · 查询参数 · 响应模型 · 错误处理 | ✅ 已完成 |
 | **2** | 请求与响应 | 高级验证 · Header/Cookie/表单/文件上传 · 依赖注入 · 中间件与 CORS · 静态文件与模板 | ✅ 已完成 |
 | **3** | 数据库与 ORM | SQLAlchemy 基础 · 集成 FastAPI · Alembic 迁移 · 异步数据库 · 高级话题 | ✅ 已完成 |
-| **4** | 认证与授权 | 认证基础 · JWT · 权限控制 · 安全最佳实践 | 🚧 规划中 |
-| **5** | 测试 | TestClient · Mock 与依赖覆盖 · CI 集成 | 🚧 规划中 |
+| **4** | 认证与授权 | 认证基础 · JWT · 权限控制 · 安全最佳实践 | ✅ 已完成 |
+| **5** | 测试 | TestClient · Mock 与依赖覆盖 · CI 集成 | ✅ 已完成 |
 | **6** | 高级特性 | 后台任务 · WebSocket · 生命周期 · API 版本化 · 性能优化 | 🚧 规划中 |
 | **7** | 架构设计 | 项目结构 · 配置管理 · 日志系统 · 缓存策略 | 🚧 规划中 |
 | **8** | 部署运维 | Docker · CI/CD · Nginx · 监控 | 🚧 规划中 |
@@ -116,8 +118,12 @@ source venv/bin/activate
 
 ```bash
 pip install fastapi uvicorn[standard]
-# 阶段 2.5 需要额外安装：
-pip install jinja2 aiofiles
+# 阶段 3+ 需要额外安装：
+pip install sqlalchemy aiosqlite
+# 阶段 4+ 需要额外安装：
+pip install python-jose[cryptography] passlib[bcrypt] python-multipart
+# 阶段 5+ 需要额外安装：
+pip install httpx pytest pytest-cov
 ```
 
 ### 4. 运行第一个 Demo
@@ -133,9 +139,10 @@ uvicorn 1.1_hello_world:app --reload
 ### 5. 按推荐顺序学习
 
 ```
-1. 阅读 FastAPI学习方法.md       → 了解六步学习法
-2. 阅读 FastAPI学习路线.md       → 了解整体学习路径
-3. 从 阶段0 开始逐个阶段学习      → 每个阶段：读文档 → 跑代码 → 做练习 → 勾选检查清单
+1. 阅读 FastAPI学习方法.md        → 了解六步学习法
+2. 阅读 FastAPI学习路线.md        → 了解整体学习路径
+3. 从 阶段0 开始逐个阶段学习       → 每个阶段：读文档 → 跑代码 → 做练习 → 勾选检查清单
+4. 当前进度：阶段 0-5 文档已完成   → 阶段 6-9 持续更新中
 ```
 
 ---
@@ -151,11 +158,16 @@ hello-FastAPI/
 │
 ├── 阶段0-前置基础/               ← 📝 4 章教程文档
 ├── 阶段1-FastAPI核心/            ← 📝 5 章教程文档
-├── 阶段2-请求与响应/              ← 📝 5 章教程文档 
+├── 阶段2-请求与响应/              ← 📝 5 章教程文档
+├── 阶段3-数据库与ORM/            ← 📝 5 章教程文档
+├── 阶段4-认证与授权/             ← 📝 4 章教程文档
+├── 阶段5-测试/                   ← 📝 3 章教程文档
 │
 └── code/                         ← 💻 代码 Demo
     ├── 阶段1-FastAPI核心/
-    └── 阶段2-请求与响应/
+    ├── 阶段2-请求与响应/
+    ├── 阶段3-数据库与ORM/
+    └── 阶段4-认证与授权/
 ```
 
 ---
