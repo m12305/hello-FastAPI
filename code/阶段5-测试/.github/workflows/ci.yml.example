@@ -1,0 +1,57 @@
+# .github/workflows/ci.yml — 示例 CI 配置（5.3 §3）
+#
+# 使用方式：
+#   1. 将本文件重命名为 ci.yml
+#   2. 放到项目根目录的 .github/workflows/ 下
+#   3. 提交到 GitHub → Actions 标签页即可看到
+
+name: CI Pipeline
+
+# ── 触发条件 ──
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── 代码风格检查 ──
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - run: pip install ruff
+    - run: ruff check .
+
+  # ── 测试（核心）──
+  test:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install fastapi uvicorn sqlalchemy python-jose[cryptography] passlib[bcrypt] httpx pytest pytest-cov
+
+    - name: Run tests with coverage
+      run: |
+        cd code/阶段5-测试
+        pytest tests/ -v --cov=. --cov-report=xml --cov-report=term-missing
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./code/阶段5-测试/coverage.xml
+        fail_ci_if_error: false
